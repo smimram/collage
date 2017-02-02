@@ -26,9 +26,9 @@ img3.jpg
 The first line describes the format of the collage as follows:
 - such a description always starts with `=`,
 - `_` means take an image, `_` means take another image and `h` means group the two previous horizontally,
-- `v` means group the two previous vertically.
+- `v` means group the two previous vertically,
 
-It will thus make a 2×2 square of photos. The second collage is similar. `p` means that an image is "prioritary", i.e. it should take as much space as available (while keeping aspect ratio).
+and the four required files are listed below. It will thus make a 2×2 square of photos. The second collage is similar, the new operation `p` means that an image is "prioritary", i.e. it should take as much space as available (while keeping aspect ratio).
 
 Some more examples can be found in the [test](test) directory.
 
