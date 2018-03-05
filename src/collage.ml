@@ -34,12 +34,17 @@ module Tile = struct
     let i = ref 0 in
     while !i < String.length s do
       (* Printf.printf "queue: %d\n%!" (Stack.length q); *)
+      (* integer parameter indicating arity *)
       let arity d =
-        if !i+1 >= String.length s || not (Char.is_figure s.[!i+1]) then d
-        else
-          let n = Char.int_of_figure s.[!i+1] in
-          incr i;
-          n
+        let s = String.sub_all s (!i+1) Char.is_figure in
+        i := !i + String.length s;
+        if s = "" then d else int_of_string s
+      in
+      (* float parameter *)
+      let float x =
+        let s = String.sub_all s (!i+1) (fun c -> Char.is_figure c || c = '.') in
+        i := !i + String.length s;
+        if s = "" then x else float_of_string s
       in
       let k =
         (* Printf.printf "%c\n%!" s.[!i]; *)
@@ -64,6 +69,16 @@ module Tile = struct
         | 'p' ->
            let t = Stack.pop q in
            (fun img -> P (t img))
+        | 's' ->
+           let x = float 1. in
+           let scale n = Float.round_to_int (x *. Float.of_int n) in
+           let t = Stack.pop q in
+           (fun img ->
+             (* for now we can only scale images *)
+             match t img with
+             | I i -> I { i with width = scale i.width; height = scale i.height }
+             | t -> t
+           )
         | '_' ->
            let nn = !n in
            incr n;
@@ -225,12 +240,21 @@ let white = { Color.r = 255; g = 255; b = 255 }
 module Output = struct
   let name = ref "page"
 
+  let dpi () = 600.
+  let dpmm () = dpi () /. 25.4
+  let pixels_of_mm x = Float.round_to_int (x *. dpmm ())
+  let sizemm () =
+    (* 297., 210. (\* A4 portrait *\) *)
+    290., 220.
+  let widthmm () = fst (sizemm ())
+  let heightmm () = snd (sizemm ())
+
   (* Scaling factor: faster to test... *)
-  let scale = ref 1
-  let width () = 7016 / !scale
-  let height () = 4960 / !scale
-  let border () = 200 / !scale
-  let separator () = 40 / !scale
+  let scale = ref 1.
+  let width () = pixels_of_mm (widthmm () *. !scale)
+  let height () = pixels_of_mm (heightmm () *. !scale)
+  let border () = pixels_of_mm (10. *. !scale)
+  let separator () = pixels_of_mm (2. *. !scale)
 
   (** Maximum expansion of images. *)
   let expand = ref 2
@@ -257,6 +281,7 @@ let process f =
           | "22" | "2x2" | "2+2" -> "__h__hv"
           | "3x2" -> "___h3___h3v"
           | "33" | "3x3" -> "___h3___h3___h3v3"
+          | "44" -> "____h4____h4____h4____h4v4"
           | "1+2" -> "_p__vh"
           | "2+1" -> "__v_ph"
           | "3+1" -> "___v3_ph"
@@ -305,7 +330,7 @@ let () =
   Arg.parse
     [
       "--display", Arg.Set Output.display, " Display output.";
-      "--draft", Arg.Unit (fun () -> Output.scale := 8), " Draft rendering.";
+      "--draft", Arg.Unit (fun () -> Output.scale := 1. /. 8.), " Draft rendering.";
       "--name", Arg.Set_string Output.name, " Output file name.";
     ]
     (fun s -> file := s)
