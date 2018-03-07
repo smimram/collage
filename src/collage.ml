@@ -241,20 +241,20 @@ module Output = struct
   let name = ref "page"
 
   let dpi () = 600.
-  let dpmm () = dpi () /. 25.4
-  let pixels_of_mm x = Float.round_to_int (x *. dpmm ())
-  let sizemm () =
-    (* 297., 210. (\* A4 portrait *\) *)
-    290., 220.
-  let widthmm () = fst (sizemm ())
-  let heightmm () = snd (sizemm ())
+  let dpcm () = dpi () /. 2.54
+  let pixels_of_cm x = Float.round_to_int (x *. dpcm ())
+  let sizecm () =
+    (* 29.7, 21.0 (\* A4 portrait *\) *)
+    29., 22.
+  let widthcm () = fst (sizecm ())
+  let heightcm () = snd (sizecm ())
 
   (* Scaling factor: faster to test... *)
   let scale = ref 1.
-  let width () = pixels_of_mm (widthmm () *. !scale)
-  let height () = pixels_of_mm (heightmm () *. !scale)
-  let border () = pixels_of_mm (10. *. !scale)
-  let separator () = pixels_of_mm (2. *. !scale)
+  let width () = pixels_of_cm (widthcm () *. !scale)
+  let height () = pixels_of_cm (heightcm () *. !scale)
+  let border () = pixels_of_cm (1. *. !scale)
+  let separator () = pixels_of_cm (0.2 *. !scale)
 
   (** Maximum expansion of images. *)
   let expand = ref 2
