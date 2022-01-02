@@ -1,5 +1,7 @@
-all clean:
-	$(MAKE) -C src $@
+all: build
+
+build:
+	@dune build
 
 test:
 	$(MAKE) -C test
