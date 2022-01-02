@@ -12,4 +12,8 @@
   (name collage)
   (synopsis "Generate photo collages")
   (description "Generate photo collages by putting multiple pictures, appropriately scaled, on one image. This is mostly useful to generate printed photo books.")
+  (depends
+    graphics
+    camlimages
+  )
 )

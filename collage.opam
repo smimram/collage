@@ -11,6 +11,8 @@ homepage: "https://github.com/smimram/collage"
 bug-reports: "https://github.com/smimram/collage/issues"
 depends: [
   "dune" {>= "2.0"}
+  "graphics"
+  "camlimages"
 ]
 build: [
   ["dune" "subst"] {pinned}
