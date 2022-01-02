@@ -12,6 +12,6 @@ jobs:
     - name: Pin locally
       run: opam pin -y add -n .
     - name: Install locally
-      run: opam install -y -t saml
+      run: opam install -y -t collage
     - name: Test
       run: opam exec make test
