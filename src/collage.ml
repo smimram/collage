@@ -14,7 +14,7 @@ module Tile = struct
     | I of img (** image *)
 
   (** String representation. *)
-  let rec to_string t =
+  let to_string t =
     let rec to_string pa t =
       let p s = if pa then "(" ^ s ^ ")" else s in
       match t with
@@ -279,12 +279,13 @@ let process f =
         let s =
           match s with
           | "22" | "2x2" | "2+2" -> "__h__hv"
-          | "3x2" -> "___h3___h3v"
+          | "3x2" | "3+3" -> "___h3___h3v"
           | "33" | "3x3" -> "___h3___h3___h3v3"
           | "44" -> "____h4____h4____h4____h4v4"
           | "1+2" -> "_p__vh"
           | "2+1" -> "__v_ph"
           | "3+1" -> "___v3_ph"
+          | "4+4" -> "____h4____h4v"
           | _ -> s
         in
         let t,n = Tile.parse s in
