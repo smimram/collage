@@ -1,4 +1,4 @@
 (executable
- (name collage)
+ (public_name collage)
  (libraries graphics camlimages.jpeg camlimages.png camlimages.graphics)
 )
