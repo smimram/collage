@@ -1,5 +1,2 @@
-COLLAGE=../_build/default/src/collage.exe
-
 all:
-	$(MAKE) -C .. build
-	$(COLLAGE) --draft collage.txt
+	@dune exec -- ../src/collage.exe --draft collage.txt
