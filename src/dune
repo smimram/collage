@@ -1,0 +1,4 @@
+(executable
+ (name collage)
+ (libraries graphics camlimages.jpeg camlimages.png camlimages.graphics)
+)
